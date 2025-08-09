@@ -298,13 +298,7 @@ export default function Page() {
 
             {/* Enhanced Mobile-First Controls */}
             <div className="flex items-center space-x-2 sm:space-x-3">
-              <a
-                href="/admin"
-                className="hidden sm:flex items-center space-x-2 px-2 sm:px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs sm:text-sm transition-colors"
-              >
-                <Settings className="w-3 h-3 sm:w-4 sm:h-4" />
-                <span className="hidden lg:inline">Admin</span>
-              </a>
+            
               
               <motion.button
                 className="md:hidden p-2 sm:p-3 rounded-xl bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-300 touch-manipulation"
