@@ -1,13 +1,59 @@
 @import "tailwindcss";
 
+/* Force dark mode variables regardless of system preference */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #111827;
+  --foreground: #ffffff;
+  color-scheme: dark;
 }
 
+/* Force dark mode on all elements */
+html {
+  background-color: #111827 !important;
+  color: #ffffff !important;
+}
+
+html body {
+  background-color: #111827 !important;
+  color: #ffffff !important;
+}
+
+/* Ensure dark mode even when .dark class is present */
 html.dark body {
-  background-color: rgb(17 24 39);
-  color: rgb(255 255 255);
+  background-color: #111827 !important;
+  color: #ffffff !important;
+}
+
+/* Override any light mode styles */
+* {
+  color-scheme: dark;
+}
+
+/* Force dark mode regardless of prefers-color-scheme */
+@media (prefers-color-scheme: light) {
+  html {
+    background-color: #111827 !important;
+    color: #ffffff !important;
+  }
+  
+  body {
+    background-color: #111827 !important;
+    color: #ffffff !important;
+  }
+}
+
+/* Ensure form elements also use dark mode */
+input, textarea, select, button {
+  color-scheme: dark;
+}
+
+/* Override any browser default styles that might interfere */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px #374151 inset !important;
+  -webkit-text-fill-color: #ffffff !important;
 }
 
 /* Touch optimization for mobile devices */
