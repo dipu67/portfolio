@@ -297,7 +297,7 @@ export default function Page() {
             </div>
 
             {/* Enhanced Mobile-First Controls */}
-            <div className="flex items-center space-x-2 sm:space-x-3">
+            <div className="flex items-center space-x-2 text-black dark:text-white sm:space-x-3">
             
               
               <motion.button
@@ -346,18 +346,7 @@ export default function Page() {
                   </div>
                 </motion.a>
               ))}
-              <motion.a
-                href="/admin"
-                className="flex items-center space-x-3 py-4 px-4 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-xl transition-all duration-300 text-lg font-medium touch-manipulation mt-2 border-t border-gray-200/50 dark:border-gray-700/50"
-                onClick={() => setIsMenuOpen(false)}
-                initial={{ x: -50, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                transition={{ delay: 0.5 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <Settings className="w-5 h-5" />
-                <span>Admin Panel</span>
-              </motion.a>
+              
             </div>
           </div>
         </motion.div>
@@ -387,11 +376,13 @@ export default function Page() {
             >
               <motion.div 
                 className="w-full h-full rounded-full bg-gradient-to-br from-blue-500 via-purple-600 to-pink-500 p-0.5 sm:p-1"
-                animate={{ rotate: 360 }}
+                animate={{ 
+                  scale: [1, 1.05, 1],
+                }}
                 transition={{ 
-                  duration: 20,
+                  duration: 3,
                   repeat: Infinity,
-                  ease: "linear"
+                  ease: "easeInOut"
                 }}
               >
                 <motion.div 
