@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { Save, Eye, EyeOff, Settings, Plus, Trash2, Edit3, ArrowLeft, Image as ImageIcon, Upload, Code, Copy, Star, MessageSquare, ChevronUp, ChevronDown, GripVertical, Hash } from 'lucide-react'
+import { Save, Eye, EyeOff, Settings, Plus, Trash2, Edit3, ArrowLeft, Image as ImageIcon, Upload, Code, Copy, Star, MessageSquare, ChevronUp, ChevronDown, GripVertical, Hash, Send, RefreshCw } from 'lucide-react'
 import ImagePicker from '../components/ImagePicker'
 
 interface PortfolioData {
@@ -41,6 +41,13 @@ export default function AdminPanel() {
     index?: number
     field: string
   } | null>(null)
+  const [telegramStatus, setTelegramStatus] = useState<{
+    configured: boolean
+    connected: boolean
+    botInfo: any
+  } | null>(null)
+  const [telegramTesting, setTelegramTesting] = useState(false)
+  const [telegramMessage, setTelegramMessage] = useState('')
   const router = useRouter()
 
   useEffect(() => {
@@ -53,6 +60,7 @@ export default function AdminPanel() {
     setIsAuthenticated(true)
     loadData()
     loadMessages()
+    loadTelegramStatus()
   }, [router])
 
   const loadData = async () => {
@@ -324,6 +332,54 @@ export default function AdminPanel() {
     setTimeout(() => setSaveMessage(''), 2000)
   }
 
+  const loadTelegramStatus = async () => {
+    try {
+      const response = await fetch('/api/telegram/test')
+      const result = await response.json()
+      setTelegramStatus({
+        configured: result.success,
+        connected: result.success,
+        botInfo: result.botInfo || null
+      })
+    } catch (error) {
+      console.error('Failed to check Telegram status:', error)
+      setTelegramStatus({
+        configured: false,
+        connected: false,
+        botInfo: null
+      })
+    }
+  }
+
+  const testTelegram = async () => {
+    setTelegramTesting(true)
+    try {
+      const response = await fetch('/api/telegram/test', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message: 'Test notification from portfolio admin panel!'
+        })
+      })
+      
+      const result = await response.json()
+      
+      if (result.success) {
+        setSaveMessage('✅ Test notification sent successfully!')
+      } else {
+        setSaveMessage('❌ Failed to send test notification')
+      }
+    } catch (error) {
+      console.error('Failed to send test notification:', error)
+      setSaveMessage('❌ Failed to send test notification')
+    } finally {
+      setTelegramTesting(false)
+      setTimeout(() => setSaveMessage(''), 3000)
+    }
+  }
+
   const addTestimonial = () => {
     if (!data) return
     
@@ -519,101 +575,119 @@ export default function AdminPanel() {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      {/* Header */}
+      {/* Mobile-Responsive Header */}
       <div className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-4">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8">
+          <div className="flex justify-between items-center h-14 sm:h-16">
+            <div className="flex items-center space-x-2 sm:space-x-4 min-w-0 flex-1">
               <button
                 onClick={() => router.push('/')}
-                className="flex items-center space-x-2 text-gray-600 hover:text-blue-600 transition-colors"
+                className="flex items-center space-x-1 sm:space-x-2 text-gray-600 hover:text-blue-600 transition-colors text-sm sm:text-base"
               >
-                <ArrowLeft className="w-5 h-5" />
-                <span>Back to Portfolio</span>
+                <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" />
+                <span className="hidden sm:inline">Back to Portfolio</span>
+                <span className="sm:hidden">Back</span>
               </button>
-              <div className="h-6 w-px bg-gray-300"></div>
-              <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Portfolio CMS Admin</h1>
+              <div className="h-4 sm:h-6 w-px bg-gray-300 dark:bg-gray-600"></div>
+              <h1 className="text-lg sm:text-2xl font-bold text-gray-900 dark:text-white truncate">
+                <span className="hidden sm:inline">Portfolio CMS Admin</span>
+                <span className="sm:hidden">Admin</span>
+              </h1>
             </div>
             
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2 sm:space-x-4 flex-shrink-0">
               {saveMessage && (
-                <span className="text-sm font-medium">{saveMessage}</span>
+                <span className="text-xs sm:text-sm font-medium hidden md:inline">{saveMessage}</span>
               )}
               <button
                 onClick={() => router.push('/')}
-                className="flex items-center space-x-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors"
+                className="flex items-center space-x-1 sm:space-x-2 px-2 sm:px-4 py-1.5 sm:py-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-lg transition-colors text-sm"
               >
                 <Eye className="w-4 h-4" />
-                <span>Preview</span>
+                <span className="hidden sm:inline">Preview</span>
               </button>
               <button
                 onClick={saveData}
                 disabled={isSaving}
-                className="flex items-center space-x-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors disabled:opacity-50"
+                className="flex items-center space-x-1 sm:space-x-2 px-2 sm:px-4 py-1.5 sm:py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors disabled:opacity-50 text-sm"
               >
                 <Save className="w-4 h-4" />
-                <span>{isSaving ? 'Saving...' : 'Save Changes'}</span>
+                <span className="hidden sm:inline">{isSaving ? 'Saving...' : 'Save Changes'}</span>
+                <span className="sm:hidden">{isSaving ? '...' : 'Save'}</span>
               </button>
               <button
                 onClick={logout}
-                className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors"
+                className="px-2 sm:px-4 py-1.5 sm:py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors text-sm"
               >
-                Logout
+                <span className="hidden sm:inline">Logout</span>
+                <span className="sm:hidden">Exit</span>
               </button>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex gap-8">
-          {/* Sidebar */}
-          <div className="w-64 flex-shrink-0">
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4">
-              <nav className="space-y-2">
-                {[
-                  { id: 'personal', label: 'Personal Info', icon: Settings },
-                  { id: 'about', label: 'About Section', icon: Edit3 },
-                  { id: 'stats', label: 'Statistics', icon: Settings },
-                  { id: 'skills', label: 'Skills', icon: Settings },
-                  { id: 'projects', label: 'Projects', icon: Settings },
-                  { id: 'messages', label: `Messages (${messages.filter(m => m.status === 'unread').length})`, icon: MessageSquare },
-                  { id: 'images', label: 'Image Manager', icon: ImageIcon },
-                  { id: 'testimonials', label: 'Testimonials', icon: Settings },
-                ].map((tab) => (
-                  <button
-                    key={tab.id}
-                    onClick={() => setActiveTab(tab.id)}
-                    className={`w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-left transition-colors ${
-                      activeTab === tab.id
-                        ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/20 dark:text-blue-400'
-                        : 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700'
-                    }`}
-                  >
-                    <tab.icon className="w-4 h-4" />
-                    <span>{tab.label}</span>
-                  </button>
-                ))}
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 py-4 sm:py-8">
+        {/* Mobile Save Message */}
+        {saveMessage && (
+          <div className="md:hidden mb-4 p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-700 rounded-lg">
+            <span className="text-sm font-medium text-green-800 dark:text-green-200">{saveMessage}</span>
+          </div>
+        )}
+        
+        <div className="flex flex-col lg:flex-row gap-4 lg:gap-8">
+          {/* Mobile-Responsive Sidebar */}
+          <div className="w-full lg:w-64 flex-shrink-0">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-3 sm:p-4">
+              {/* Mobile: Horizontal scroll navigation */}
+              <nav className="lg:space-y-2">
+                <div className="flex lg:flex-col space-x-2 lg:space-x-0 lg:space-y-1 overflow-x-auto lg:overflow-x-visible pb-2 lg:pb-0">
+                  {[
+                    { id: 'personal', label: 'Personal Info', icon: Settings, shortLabel: 'Personal' },
+                    { id: 'about', label: 'About Section', icon: Edit3, shortLabel: 'About' },
+                    { id: 'stats', label: 'Statistics', icon: Settings, shortLabel: 'Stats' },
+                    { id: 'skills', label: 'Skills', icon: Settings, shortLabel: 'Skills' },
+                    { id: 'projects', label: 'Projects', icon: Settings, shortLabel: 'Projects' },
+                    { id: 'messages', label: `Messages (${messages.filter(m => m.status === 'unread').length})`, icon: MessageSquare, shortLabel: 'Messages' },
+                    { id: 'telegram', label: 'Telegram Bot', icon: Send, shortLabel: 'Telegram' },
+                    { id: 'images', label: 'Image Manager', icon: ImageIcon, shortLabel: 'Images' },
+                    { id: 'testimonials', label: 'Testimonials', icon: Settings, shortLabel: 'Reviews' },
+                  ].map((tab) => (
+                    <button
+                      key={tab.id}
+                      onClick={() => setActiveTab(tab.id)}
+                      className={`flex-shrink-0 lg:w-full flex items-center space-x-2 lg:space-x-3 px-3 py-2 rounded-lg text-left transition-colors whitespace-nowrap text-sm lg:text-base ${
+                        activeTab === tab.id
+                          ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/20 dark:text-blue-400'
+                          : 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700'
+                      }`}
+                    >
+                      <tab.icon className="w-4 h-4 flex-shrink-0" />
+                      <span className="lg:hidden">{tab.shortLabel}</span>
+                      <span className="hidden lg:inline">{tab.label}</span>
+                    </button>
+                  ))}
+                </div>
               </nav>
             </div>
           </div>
 
           {/* Main Content */}
-          <div className="flex-1">
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+          <div className="flex-1 min-w-0">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-3 sm:p-4 lg:p-6">
               {/* Personal Info Tab */}
               {activeTab === 'personal' && (
-                <div className="space-y-6">
-                  <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Personal Information</h2>
+                <div className="space-y-4 sm:space-y-6">
+                  <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">Personal Information</h2>
                   
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Name</label>
                       <input
                         type="text"
                         value={data.personal.name}
                         onChange={(e) => updatePersonal('name', e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white text-sm sm:text-base"
                       />
                     </div>
                     
@@ -623,7 +697,7 @@ export default function AdminPanel() {
                         type="text"
                         value={data.personal.title}
                         onChange={(e) => updatePersonal('title', e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white text-sm sm:text-base"
                       />
                     </div>
                     
@@ -633,7 +707,7 @@ export default function AdminPanel() {
                         type="email"
                         value={data.personal.email}
                         onChange={(e) => updatePersonal('email', e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white text-sm sm:text-base"
                       />
                     </div>
                     
@@ -643,7 +717,7 @@ export default function AdminPanel() {
                         type="text"
                         value={data.personal.phone}
                         onChange={(e) => updatePersonal('phone', e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white text-sm sm:text-base"
                       />
                     </div>
                     
@@ -653,7 +727,7 @@ export default function AdminPanel() {
                         type="text"
                         value={data.personal.location}
                         onChange={(e) => updatePersonal('location', e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white text-sm sm:text-base"
                       />
                     </div>
 
@@ -663,7 +737,7 @@ export default function AdminPanel() {
                         type="url"
                         value={data.personal.social.github}
                         onChange={(e) => updatePersonal('social', { ...data.personal.social, github: e.target.value })}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white text-sm sm:text-base"
                       />
                     </div>
 
@@ -673,7 +747,7 @@ export default function AdminPanel() {
                         type="url"
                         value={data.personal.social.linkedin}
                         onChange={(e) => updatePersonal('social', { ...data.personal.social, linkedin: e.target.value })}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white text-sm sm:text-base"
                         placeholder="https://linkedin.com/in/yourusername"
                       />
                     </div>
@@ -684,30 +758,30 @@ export default function AdminPanel() {
                         type="url"
                         value={data.personal.resumeUrl}
                         onChange={(e) => updatePersonal('resumeUrl', e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white text-sm sm:text-base"
                         placeholder="Link to your resume/CV"
                       />
                     </div>
 
-                    <div>
+                    <div className="sm:col-span-2">
                       <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Profile Image</label>
-                      <div className="flex items-center space-x-3">
-                        <div className="flex-1">
+                      <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-3 sm:space-y-0 sm:space-x-3">
+                        <div className="flex-1 w-full">
                           <input
                             type="url"
                             value={data.personal.profileImage || ''}
                             onChange={(e) => updatePersonal('profileImage', e.target.value)}
                             placeholder="Enter image URL or use image picker"
-                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white text-sm sm:text-base"
                           />
                         </div>
                         <button
                           type="button"
                           onClick={() => openImagePicker('personal', 'profileImage')}
-                          className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors flex items-center space-x-2"
+                          className="w-full sm:w-auto px-3 sm:px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors flex items-center justify-center space-x-2 text-sm sm:text-base"
                         >
                           <ImageIcon className="w-4 h-4" />
-                          <span>Browse</span>
+                          <span>Browse Images</span>
                         </button>
                       </div>
                       {data.personal.profileImage && (
@@ -715,7 +789,7 @@ export default function AdminPanel() {
                           <img
                             src={data.personal.profileImage}
                             alt="Profile preview"
-                            className="w-20 h-20 rounded-full object-cover border-2 border-gray-200 dark:border-gray-600"
+                            className="w-16 h-16 sm:w-20 sm:h-20 rounded-full object-cover border-2 border-gray-200 dark:border-gray-600"
                           />
                         </div>
                       )}
@@ -728,7 +802,8 @@ export default function AdminPanel() {
                       value={data.personal.description}
                       onChange={(e) => updatePersonal('description', e.target.value)}
                       rows={4}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white text-sm sm:text-base"
+                      placeholder="Write a brief description about yourself..."
                     />
                   </div>
                 </div>
@@ -736,10 +811,10 @@ export default function AdminPanel() {
 
               {/* Projects Tab */}
               {activeTab === 'projects' && (
-                <div className="space-y-6">
+                <div className="space-y-4 sm:space-y-6">
                   <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                     <div>
-                      <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Projects Management</h2>
+                      <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">Projects Management</h2>
                       <p className="text-gray-600 dark:text-gray-400 text-sm">
                         Create, edit, and manage your portfolio projects
                       </p>
@@ -778,11 +853,11 @@ export default function AdminPanel() {
                   </div>
 
                   {/* Projects Overview */}
-                  <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-lg p-4">
-                    <h3 className="text-lg font-semibold text-blue-900 dark:text-blue-100 mb-3">
+                  <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-lg p-3 sm:p-4">
+                    <h3 className="text-base sm:text-lg font-semibold text-blue-900 dark:text-blue-100 mb-3">
                       Projects Overview ({data.projects.length} total)
                     </h3>
-                    <div className="grid grid-cols-2 md:grid-cols-5 gap-4 text-sm mb-4">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-4 text-xs sm:text-sm mb-4">
                       <div className="text-blue-800 dark:text-blue-200">
                         <span className="font-medium">Completed:</span> {data.projects.filter(p => p.status === 'Completed').length}
                       </div>
@@ -832,44 +907,56 @@ export default function AdminPanel() {
                   <div className="space-y-4">
                     {data.projects.map((project, index) => (
                       <div key={project.id} className="border border-gray-200 dark:border-gray-600 rounded-lg p-4 space-y-4">
-                        <div className="flex justify-between items-start">
-                          <div className="flex items-center space-x-3">
+                        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-3 sm:space-y-0">
+                          <div className="flex items-center space-x-3 min-w-0 flex-1">
                             <div className="flex items-center space-x-2">
-                              <span className="flex items-center justify-center w-8 h-8 bg-blue-100 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 rounded-full text-sm font-bold">
+                              <span className="flex items-center justify-center w-8 h-8 bg-blue-100 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 rounded-full text-sm font-bold flex-shrink-0">
                                 #{index + 1}
                               </span>
-                              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                              <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white truncate">
                                 {project.title || `Project ${index + 1}`}
                               </h3>
                             </div>
-                            <span className={`px-2 py-1 text-xs rounded-full font-medium ${
-                              project.status === 'Completed' 
-                                ? 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400'
-                                : project.status === 'In Progress'
-                                ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400' 
-                                : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400'
-                            }`}>
-                              {project.status}
-                            </span>
-                            <span className={`px-2 py-1 text-xs rounded-full font-medium flex items-center space-x-1 ${
-                              project.visible !== false
-                                ? 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400'
-                                : 'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400'
-                            }`}>
-                              {project.visible !== false ? (
-                                <>
-                                  <Eye className="w-3 h-3" />
-                                  <span>Visible</span>
-                                </>
-                              ) : (
-                                <>
-                                  <EyeOff className="w-3 h-3" />
-                                  <span>Hidden</span>
-                                </>
-                              )}
-                            </span>
+                            
+                            {/* Mobile: Compact status badges */}
+                            <div className="flex items-center space-x-1 sm:space-x-2 flex-shrink-0">
+                              <span className={`px-1 sm:px-2 py-1 text-xs rounded-full font-medium flex items-center ${
+                                project.status === 'Completed' 
+                                  ? 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400'
+                                  : project.status === 'In Progress'
+                                  ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400' 
+                                  : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400'
+                              }`}>
+                                <span className="block sm:hidden">
+                                  {project.status === 'Completed' && '✓'}
+                                  {project.status === 'In Progress' && '●'}
+                                  {project.status === 'Planned' && '○'}
+                                </span>
+                                <span className="hidden sm:block">{project.status}</span>
+                              </span>
+                              
+                              <span className={`px-1 sm:px-2 py-1 text-xs rounded-full font-medium flex items-center ${
+                                project.visible !== false
+                                  ? 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400'
+                                  : 'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400'
+                              }`}>
+                                {project.visible !== false ? (
+                                  <>
+                                    <Eye className="w-3 h-3" />
+                                    <span className="hidden sm:inline ml-1">Visible</span>
+                                  </>
+                                ) : (
+                                  <>
+                                    <EyeOff className="w-3 h-3" />
+                                    <span className="hidden sm:inline ml-1">Hidden</span>
+                                  </>
+                                )}
+                              </span>
+                            </div>
                           </div>
-                          <div className="flex items-center space-x-2">
+                          
+                          {/* Mobile: Controls in separate row */}
+                          <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-2 w-full sm:w-auto">
                             {/* Project Ordering Controls */}
                             <div className="flex items-center space-x-1 bg-gray-100 dark:bg-gray-700 rounded-lg p-1">
                               <button
@@ -909,33 +996,34 @@ export default function AdminPanel() {
                               </select>
                             </div>
                             
-                            <div className="h-6 w-px bg-gray-300 dark:bg-gray-600"></div>
-                            
-                            <button
-                              onClick={() => toggleProjectVisibility(index)}
-                              className={`transition-colors p-1 ${
-                                project.visible !== false 
-                                  ? 'text-green-600 hover:text-green-800' 
-                                  : 'text-gray-400 hover:text-gray-600'
-                              }`}
-                              title={project.visible !== false ? 'Hide project' : 'Show project'}
-                            >
-                              {project.visible !== false ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
-                            </button>
-                            <button
-                              onClick={() => duplicateProject(index)}
-                              className="text-blue-600 hover:text-blue-800 transition-colors p-1"
-                              title="Duplicate project"
-                            >
-                              <Copy className="w-4 h-4" />
-                            </button>
-                            <button
-                              onClick={() => deleteProject(index)}
-                              className="text-red-600 hover:text-red-800 transition-colors p-1"
-                              title="Delete project"
-                            >
-                              <Trash2 className="w-4 h-4" />
-                            </button>
+                            {/* Action buttons */}
+                            <div className="flex items-center space-x-1">
+                              <button
+                                onClick={() => toggleProjectVisibility(index)}
+                                className={`transition-colors p-1.5 rounded hover:bg-gray-100 dark:hover:bg-gray-700 ${
+                                  project.visible !== false 
+                                    ? 'text-green-600 hover:text-green-800' 
+                                    : 'text-gray-400 hover:text-gray-600'
+                                }`}
+                                title={project.visible !== false ? 'Hide project' : 'Show project'}
+                              >
+                                {project.visible !== false ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
+                              </button>
+                              <button
+                                onClick={() => duplicateProject(index)}
+                                className="text-blue-600 hover:text-blue-800 transition-colors p-1.5 rounded hover:bg-blue-50 dark:hover:bg-blue-900/20"
+                                title="Duplicate project"
+                              >
+                                <Copy className="w-4 h-4" />
+                              </button>
+                              <button
+                                onClick={() => deleteProject(index)}
+                                className="text-red-600 hover:text-red-800 transition-colors p-1.5 rounded hover:bg-red-50 dark:hover:bg-red-900/20"
+                                title="Delete project"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </button>
+                            </div>
                           </div>
                         </div>
                         
@@ -2008,6 +2096,150 @@ export default function AdminPanel() {
                         </button>
                       </div>
                     )}
+                  </div>
+                </div>
+              )}
+
+              {/* Telegram Bot Tab */}
+              {activeTab === 'telegram' && (
+                <div className="space-y-6">
+                  <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                    <div>
+                      <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">Telegram Bot Configuration</h2>
+                      <p className="text-gray-600 dark:text-gray-400 text-sm">
+                        Configure Telegram bot for real-time contact form notifications
+                      </p>
+                    </div>
+                    
+                    <div className="flex items-center space-x-3">
+                      <div className={`flex items-center space-x-2 px-3 py-2 rounded-lg text-sm font-medium ${
+                        telegramStatus?.connected 
+                          ? 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400'
+                          : 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400'
+                      }`}>
+                        <div className={`w-2 h-2 rounded-full ${
+                          telegramStatus?.connected ? 'bg-green-500' : 'bg-red-500'
+                        }`}></div>
+                        <span>{telegramStatus?.connected ? 'Connected' : 'Disconnected'}</span>
+                      </div>
+                      
+                      <button
+                        onClick={loadTelegramStatus}
+                        className="flex items-center space-x-2 px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors text-sm"
+                      >
+                        <RefreshCw className="w-4 h-4" />
+                        <span>Refresh Status</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Configuration Status */}
+                  <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-lg p-4">
+                    <h3 className="text-lg font-semibold text-blue-900 dark:text-blue-100 mb-3">
+                      Setup Instructions
+                    </h3>
+                    <div className="space-y-2 text-blue-800 dark:text-blue-200 text-sm">
+                      <p><strong>1.</strong> Create a new bot by messaging @BotFather on Telegram</p>
+                      <p><strong>2.</strong> Get your bot token and add it to your .env file as TELEGRAM_BOT_TOKEN</p>
+                      <p><strong>3.</strong> Get your chat ID and add it to your .env file as TELEGRAM_CHAT_ID</p>
+                      <p><strong>4.</strong> Test the connection using the button below</p>
+                    </div>
+                  </div>
+
+                  {/* Bot Information */}
+                  {telegramStatus?.botInfo && (
+                    <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-700 rounded-lg p-4">
+                      <h3 className="text-lg font-semibold text-green-900 dark:text-green-100 mb-3">
+                        Bot Information
+                      </h3>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+                        <div>
+                          <span className="font-medium text-green-800 dark:text-green-200">Bot Name:</span>
+                          <span className="ml-2 text-green-700 dark:text-green-300">{telegramStatus.botInfo.first_name}</span>
+                        </div>
+                        <div>
+                          <span className="font-medium text-green-800 dark:text-green-200">Username:</span>
+                          <span className="ml-2 text-green-700 dark:text-green-300">@{telegramStatus.botInfo.username}</span>
+                        </div>
+                        <div>
+                          <span className="font-medium text-green-800 dark:text-green-200">Status:</span>
+                          <span className="ml-2 text-green-700 dark:text-green-300">
+                            {telegramStatus.botInfo.can_join_groups ? 'Active' : 'Limited'}
+                          </span>
+                        </div>
+                        <div>
+                          <span className="font-medium text-green-800 dark:text-green-200">Type:</span>
+                          <span className="ml-2 text-green-700 dark:text-green-300">
+                            {telegramStatus.botInfo.is_bot ? 'Bot' : 'User'}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Test Section */}
+                  <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6">
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                      Test Telegram Notifications
+                    </h3>
+                    
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                          Test Message
+                        </label>
+                        <textarea
+                          value={telegramMessage}
+                          onChange={(e) => setTelegramMessage(e.target.value)}
+                          rows={3}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white text-sm"
+                          placeholder="Enter a test message to send to your Telegram..."
+                        />
+                      </div>
+                      
+                      <div className="flex flex-col sm:flex-row gap-3">
+                        <button
+                          onClick={() => {
+                            const message = telegramMessage || 'Test notification from portfolio admin panel!'
+                            setTelegramMessage(message)
+                            testTelegram()
+                          }}
+                          disabled={telegramTesting}
+                          className="flex items-center justify-center space-x-2 px-4 py-2 bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white rounded-lg transition-colors text-sm"
+                        >
+                          <Send className="w-4 h-4" />
+                          <span>{telegramTesting ? 'Sending...' : 'Send Test Message'}</span>
+                        </button>
+                        
+                        <button
+                          onClick={loadTelegramStatus}
+                          className="flex items-center justify-center space-x-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors text-sm"
+                        >
+                          <RefreshCw className="w-4 h-4" />
+                          <span>Check Bot Status</span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Configuration Help */}
+                  <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-700 rounded-lg p-4">
+                    <h3 className="text-lg font-semibold text-yellow-900 dark:text-yellow-100 mb-3">
+                      Environment Variables
+                    </h3>
+                    <div className="space-y-2 text-yellow-800 dark:text-yellow-200 text-sm">
+                      <p><strong>Required in your .env file:</strong></p>
+                      <div className="bg-yellow-100 dark:bg-yellow-800/30 rounded p-2 font-mono text-xs">
+                        <div>TELEGRAM_BOT_TOKEN=your_bot_token_here</div>
+                        <div>TELEGRAM_CHAT_ID=your_chat_id_here</div>
+                      </div>
+                      <p className="mt-2">
+                        <strong>To get your chat ID:</strong> Start a chat with your bot and visit 
+                        <code className="bg-yellow-100 dark:bg-yellow-800/30 px-1 rounded mx-1">
+                          https://api.telegram.org/bot&lt;YOUR_BOT_TOKEN&gt;/getUpdates
+                        </code>
+                      </p>
+                    </div>
                   </div>
                 </div>
               )}

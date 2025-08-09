@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import fs from 'fs'
 import path from 'path'
+import { telegramService } from '@/lib/telegram'
 
 const MESSAGES_FILE = path.join(process.cwd(), 'data', 'messages.json')
 
@@ -59,6 +60,21 @@ export async function POST(request: NextRequest) {
       
       messages.push(newMessage)
       fs.writeFileSync(MESSAGES_FILE, JSON.stringify(messages, null, 2))
+      
+      // Send Telegram notification for new contact message
+      try {
+        await telegramService.notifyNewContact({
+          name,
+          email,
+          subject,
+          message,
+          priority: 'normal',
+          timestamp: newMessage.submittedAt
+        })
+      } catch (telegramError) {
+        console.error('Failed to send Telegram notification:', telegramError)
+        // Don't fail the request if Telegram fails
+      }
       
       return NextResponse.json({ 
         success: true, 
