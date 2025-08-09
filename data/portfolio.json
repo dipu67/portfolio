@@ -11,7 +11,7 @@
     "resumeUrl": "#",
     "social": {
       "github": "https://github.com/dipu67",
-      "linkedin": "https://linkedin.com/in/yourusername",
+      "linkedin": "https://linkedin.com/in/mddipu",
       "email": "mailto:your.email@example.com"
     }
   },
@@ -196,6 +196,72 @@
   ],
   "projects": [
     {
+      "id": 6,
+      "title": "Developer Portfolio CMS",
+      "description": "Modern responsive portfolio website with integrated CMS functionality, dark mode support, advanced animations, and admin panel for content management.",
+      "image": "bg-gradient-to-br from-violet-500 via-violet-600 to-purple-600",
+      "technologies": [
+        "Next.js",
+        "TypeScript",
+        "Tailwind CSS",
+        "Framer Motion",
+        "Lucide React",
+        "JSON Database"
+      ],
+      "features": [
+        "Responsive Mobile-First Design",
+        "Advanced Framer Motion Animations",
+        "Dark Mode Support",
+        "Admin Panel for Content Management",
+        "Real-time GitHub Stats Integration",
+        "SEO Optimized",
+        "Touch-Optimized Interactions",
+        "Performance Optimized"
+      ],
+      "github": "https://github.com/dipu67/portfolio",
+      "live": "https://portfolio-demo.vercel.app",
+      "type": "Full Stack",
+      "stats": {
+        "stars": 42,
+        "forks": 11,
+        "views": 1350
+      },
+      "status": "Completed"
+    },
+    {
+      "id": 4,
+      "title": "Real-time Chat Application",
+      "description": "Modern chat application with real-time messaging, file sharing, group chats, video calls, and end-to-end encryption for secure communication.",
+      "image": "/images/socialapp.png",
+      "technologies": [
+        "React",
+        "Socket.io",
+        "Node.js",
+        "MongoDB",
+        "Express",
+        "WebRTC"
+      ],
+      "features": [
+        "Real-time Messaging",
+        "File & Media Sharing",
+        "Group Chat Management",
+        "Video & Voice Calls",
+        "End-to-end Encryption",
+        "Message Search",
+        "Online Status Indicators",
+        "Push Notifications"
+      ],
+      "github": "https://github.com/dipu67/socialApp",
+      "live": "https://socialapp.a24dev.me",
+      "type": "Full Stack",
+      "stats": {
+        "stars": 67,
+        "forks": 15,
+        "views": 1500
+      },
+      "status": "Completed"
+    },
+    {
       "id": 1,
       "title": "E-Commerce MERN Platform",
       "description": "Full-stack e-commerce platform with comprehensive features including user authentication, payment processing, inventory management, and admin dashboard. Built with modern MERN stack technologies.",
@@ -227,7 +293,7 @@
         "forks": 12,
         "views": 1200
       },
-      "status": "Completed"
+      "status": "In Progress"
     },
     {
       "id": 2,
@@ -296,39 +362,6 @@
       "status": "Completed"
     },
     {
-      "id": 4,
-      "title": "Real-time Chat Application",
-      "description": "Modern chat application with real-time messaging, file sharing, group chats, video calls, and end-to-end encryption for secure communication.",
-      "image": "/images/socialapp.png",
-      "technologies": [
-        "React",
-        "Socket.io",
-        "Node.js",
-        "MongoDB",
-        "Express",
-        "WebRTC"
-      ],
-      "features": [
-        "Real-time Messaging",
-        "File & Media Sharing",
-        "Group Chat Management",
-        "Video & Voice Calls",
-        "End-to-end Encryption",
-        "Message Search",
-        "Online Status Indicators",
-        "Push Notifications"
-      ],
-      "github": "https://github.com/dipu67/socialApp",
-      "live": "https://socialapp.a24dev.me",
-      "type": "Full Stack",
-      "stats": {
-        "stars": 67,
-        "forks": 15,
-        "views": 1500
-      },
-      "status": "Completed"
-    },
-    {
       "id": 5,
       "title": "Weather Analytics Platform",
       "description": "Comprehensive weather data platform with predictive analytics, interactive maps, customizable alerts, and detailed forecasting capabilities.",
@@ -360,39 +393,6 @@
         "views": 620
       },
       "status": "In Progress"
-    },
-    {
-      "id": 6,
-      "title": "Developer Portfolio CMS",
-      "description": "Modern responsive portfolio website with integrated CMS functionality, dark mode support, advanced animations, and admin panel for content management.",
-      "image": "bg-gradient-to-br from-violet-500 via-violet-600 to-purple-600",
-      "technologies": [
-        "Next.js",
-        "TypeScript",
-        "Tailwind CSS",
-        "Framer Motion",
-        "Lucide React",
-        "JSON Database"
-      ],
-      "features": [
-        "Responsive Mobile-First Design",
-        "Advanced Framer Motion Animations",
-        "Dark Mode Support",
-        "Admin Panel for Content Management",
-        "Real-time GitHub Stats Integration",
-        "SEO Optimized",
-        "Touch-Optimized Interactions",
-        "Performance Optimized"
-      ],
-      "github": "https://github.com/dipu67/portfolio",
-      "live": "https://portfolio-demo.vercel.app",
-      "type": "Full Stack",
-      "stats": {
-        "stars": 42,
-        "forks": 11,
-        "views": 1350
-      },
-      "status": "Completed"
     }
   ],
   "testimonials": [

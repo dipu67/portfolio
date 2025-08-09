@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { Save, Eye, Settings, Plus, Trash2, Edit3, ArrowLeft, Image as ImageIcon, Upload, Code, Copy, Star, MessageSquare } from 'lucide-react'
+import { Save, Eye, EyeOff, Settings, Plus, Trash2, Edit3, ArrowLeft, Image as ImageIcon, Upload, Code, Copy, Star, MessageSquare, ChevronUp, ChevronDown, GripVertical, Hash } from 'lucide-react'
 import ImagePicker from '../components/ImagePicker'
 
 interface PortfolioData {
@@ -269,6 +269,59 @@ export default function AdminPanel() {
     // Show success message
     setSaveMessage('✅ Project duplicated successfully!')
     setTimeout(() => setSaveMessage(''), 3000)
+  }
+
+  const moveProjectUp = (index: number) => {
+    if (!data || index === 0) return
+    
+    const newProjects = [...data.projects]
+    const temp = newProjects[index]
+    newProjects[index] = newProjects[index - 1]
+    newProjects[index - 1] = temp
+    setData({ ...data, projects: newProjects })
+    
+    setSaveMessage('✅ Project moved up!')
+    setTimeout(() => setSaveMessage(''), 2000)
+  }
+
+  const moveProjectDown = (index: number) => {
+    if (!data || index === data.projects.length - 1) return
+    
+    const newProjects = [...data.projects]
+    const temp = newProjects[index]
+    newProjects[index] = newProjects[index + 1]
+    newProjects[index + 1] = temp
+    setData({ ...data, projects: newProjects })
+    
+    setSaveMessage('✅ Project moved down!')
+    setTimeout(() => setSaveMessage(''), 2000)
+  }
+
+  const moveProjectToPosition = (fromIndex: number, toIndex: number) => {
+    if (!data || fromIndex === toIndex) return
+    
+    const newProjects = [...data.projects]
+    const projectToMove = newProjects.splice(fromIndex, 1)[0]
+    newProjects.splice(toIndex, 0, projectToMove)
+    setData({ ...data, projects: newProjects })
+    
+    setSaveMessage(`✅ Project moved to position ${toIndex + 1}!`)
+    setTimeout(() => setSaveMessage(''), 2000)
+  }
+
+  const toggleProjectVisibility = (index: number) => {
+    if (!data) return
+    
+    const newProjects = [...data.projects]
+    newProjects[index] = { 
+      ...newProjects[index], 
+      visible: newProjects[index].visible !== false ? false : true 
+    }
+    setData({ ...data, projects: newProjects })
+    
+    const isVisible = newProjects[index].visible
+    setSaveMessage(`✅ Project ${isVisible ? 'shown' : 'hidden'}!`)
+    setTimeout(() => setSaveMessage(''), 2000)
   }
 
   const addTestimonial = () => {
@@ -615,6 +668,28 @@ export default function AdminPanel() {
                     </div>
 
                     <div>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">LinkedIn URL</label>
+                      <input
+                        type="url"
+                        value={data.personal.social.linkedin}
+                        onChange={(e) => updatePersonal('social', { ...data.personal.social, linkedin: e.target.value })}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                        placeholder="https://linkedin.com/in/yourusername"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Resume URL</label>
+                      <input
+                        type="url"
+                        value={data.personal.resumeUrl}
+                        onChange={(e) => updatePersonal('resumeUrl', e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                        placeholder="Link to your resume/CV"
+                      />
+                    </div>
+
+                    <div>
                       <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Profile Image</label>
                       <div className="flex items-center space-x-3">
                         <div className="flex-1">
@@ -704,10 +779,10 @@ export default function AdminPanel() {
 
                   {/* Projects Overview */}
                   <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-lg p-4">
-                    <h3 className="text-lg font-semibold text-blue-900 dark:text-blue-100 mb-2">
+                    <h3 className="text-lg font-semibold text-blue-900 dark:text-blue-100 mb-3">
                       Projects Overview ({data.projects.length} total)
                     </h3>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                    <div className="grid grid-cols-2 md:grid-cols-5 gap-4 text-sm mb-4">
                       <div className="text-blue-800 dark:text-blue-200">
                         <span className="font-medium">Completed:</span> {data.projects.filter(p => p.status === 'Completed').length}
                       </div>
@@ -717,8 +792,39 @@ export default function AdminPanel() {
                       <div className="text-blue-800 dark:text-blue-200">
                         <span className="font-medium">Planned:</span> {data.projects.filter(p => p.status === 'Planned').length}
                       </div>
-                      <div className="text-blue-800 dark:text-blue-200">
-                        <span className="font-medium">Total Features:</span> {data.projects.reduce((acc, p) => acc + (p.features?.length || 0), 0)}
+                      <div className="text-green-800 dark:text-green-200">
+                        <span className="font-medium">Visible:</span> {data.projects.filter(p => p.visible !== false).length}
+                      </div>
+                      <div className="text-red-800 dark:text-red-200">
+                        <span className="font-medium">Hidden:</span> {data.projects.filter(p => p.visible === false).length}
+                      </div>
+                    </div>
+                    <div className="text-xs text-blue-700 dark:text-blue-300 bg-blue-100 dark:bg-blue-800/30 rounded p-2">
+                      💡 <strong>Tip:</strong> Use ↑↓ arrows to reorder projects, the eye icon to show/hide, and the dropdown to jump to specific positions. Only visible projects appear on your portfolio.
+                    </div>
+                  </div>
+
+                  {/* Project Ordering Help */}
+                  <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-700 rounded-lg p-4">
+                    <h3 className="text-lg font-semibold text-green-900 dark:text-green-100 mb-2 flex items-center">
+                      <Hash className="w-5 h-5 mr-2" />
+                      Project Display Order
+                    </h3>
+                    <p className="text-green-800 dark:text-green-200 text-sm mb-3">
+                      Control how projects appear on your portfolio. Project #1 shows first, #2 shows second, etc.
+                    </p>
+                    <div className="flex flex-wrap gap-4 text-sm text-green-800 dark:text-green-200">
+                      <div className="flex items-center space-x-2">
+                        <ChevronUp className="w-4 h-4" />
+                        <span>Move up in order</span>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <ChevronDown className="w-4 h-4" />
+                        <span>Move down in order</span>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Hash className="w-4 h-4" />
+                        <span>Jump to specific position</span>
                       </div>
                     </div>
                   </div>
@@ -728,9 +834,14 @@ export default function AdminPanel() {
                       <div key={project.id} className="border border-gray-200 dark:border-gray-600 rounded-lg p-4 space-y-4">
                         <div className="flex justify-between items-start">
                           <div className="flex items-center space-x-3">
-                            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                              {project.title || `Project ${index + 1}`}
-                            </h3>
+                            <div className="flex items-center space-x-2">
+                              <span className="flex items-center justify-center w-8 h-8 bg-blue-100 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 rounded-full text-sm font-bold">
+                                #{index + 1}
+                              </span>
+                              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                                {project.title || `Project ${index + 1}`}
+                              </h3>
+                            </div>
                             <span className={`px-2 py-1 text-xs rounded-full font-medium ${
                               project.status === 'Completed' 
                                 ? 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400'
@@ -740,8 +851,77 @@ export default function AdminPanel() {
                             }`}>
                               {project.status}
                             </span>
+                            <span className={`px-2 py-1 text-xs rounded-full font-medium flex items-center space-x-1 ${
+                              project.visible !== false
+                                ? 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400'
+                                : 'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400'
+                            }`}>
+                              {project.visible !== false ? (
+                                <>
+                                  <Eye className="w-3 h-3" />
+                                  <span>Visible</span>
+                                </>
+                              ) : (
+                                <>
+                                  <EyeOff className="w-3 h-3" />
+                                  <span>Hidden</span>
+                                </>
+                              )}
+                            </span>
                           </div>
                           <div className="flex items-center space-x-2">
+                            {/* Project Ordering Controls */}
+                            <div className="flex items-center space-x-1 bg-gray-100 dark:bg-gray-700 rounded-lg p-1">
+                              <button
+                                onClick={() => moveProjectUp(index)}
+                                disabled={index === 0}
+                                className={`p-1 rounded transition-colors ${
+                                  index === 0 
+                                    ? 'text-gray-400 cursor-not-allowed' 
+                                    : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50 dark:text-gray-300 dark:hover:text-blue-400 dark:hover:bg-blue-900/20'
+                                }`}
+                                title="Move up"
+                              >
+                                <ChevronUp className="w-4 h-4" />
+                              </button>
+                              <button
+                                onClick={() => moveProjectDown(index)}
+                                disabled={index === data.projects.length - 1}
+                                className={`p-1 rounded transition-colors ${
+                                  index === data.projects.length - 1 
+                                    ? 'text-gray-400 cursor-not-allowed' 
+                                    : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50 dark:text-gray-300 dark:hover:text-blue-400 dark:hover:bg-blue-900/20'
+                                }`}
+                                title="Move down"
+                              >
+                                <ChevronDown className="w-4 h-4" />
+                              </button>
+                              <div className="w-px h-4 bg-gray-300 dark:bg-gray-600 mx-1"></div>
+                              <select
+                                value={index}
+                                onChange={(e) => moveProjectToPosition(index, parseInt(e.target.value))}
+                                className="text-xs bg-transparent border-none focus:ring-0 text-gray-600 dark:text-gray-300 pr-1"
+                                title="Move to position"
+                              >
+                                {data.projects.map((_, i) => (
+                                  <option key={i} value={i}>#{i + 1}</option>
+                                ))}
+                              </select>
+                            </div>
+                            
+                            <div className="h-6 w-px bg-gray-300 dark:bg-gray-600"></div>
+                            
+                            <button
+                              onClick={() => toggleProjectVisibility(index)}
+                              className={`transition-colors p-1 ${
+                                project.visible !== false 
+                                  ? 'text-green-600 hover:text-green-800' 
+                                  : 'text-gray-400 hover:text-gray-600'
+                              }`}
+                              title={project.visible !== false ? 'Hide project' : 'Show project'}
+                            >
+                              {project.visible !== false ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
+                            </button>
                             <button
                               onClick={() => duplicateProject(index)}
                               className="text-blue-600 hover:text-blue-800 transition-colors p-1"
@@ -805,6 +985,15 @@ export default function AdminPanel() {
                               type="url"
                               value={project.github}
                               onChange={(e) => updateProject(index, 'github', e.target.value)}
+                              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">LinkedIn URL</label>
+                            <input
+                              type="url"
+                              value={project.linkedin}
+                              onChange={(e) => updateProject(index, 'linkedin', e.target.value)}
                               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                             />
                           </div>

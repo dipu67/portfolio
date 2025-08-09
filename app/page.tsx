@@ -1255,7 +1255,7 @@ export default function Page() {
 
           {/* Mobile-First Responsive Projects Grid - Compact Size */}
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6 lg:gap-7">
-            {data.projects.map((project: any, index: number) => (
+            {data.projects.filter((project: any) => project.visible !== false).map((project: any, index: number) => (
               <motion.div
                 key={project.id}
                 className="group bg-white dark:bg-gray-900 rounded-xl sm:rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-500 border border-gray-200/50 dark:border-gray-700/50"
