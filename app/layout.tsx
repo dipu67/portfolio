@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { ThemeProvider } from "next-themes";
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,8 +15,20 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Full Stack Developer Portfolio | React, Next.js, MERN Stack",
-  description: "Portfolio of a Full Stack Developer specializing in React, Next.js, MERN stack, and Express.js. Building modern web applications with cutting-edge technologies.",
-  keywords: ["Full Stack Developer", "React", "Next.js", "MERN Stack", "Express.js", "TypeScript", "Web Development", "JavaScript", "MongoDB", "Node.js"],
+  description:
+    "Portfolio of a Full Stack Developer specializing in React, Next.js, MERN stack, and Express.js. Building modern web applications with cutting-edge technologies.",
+  keywords: [
+    "Full Stack Developer",
+    "React",
+    "Next.js",
+    "MERN Stack",
+    "Express.js",
+    "TypeScript",
+    "Web Development",
+    "JavaScript",
+    "MongoDB",
+    "Node.js",
+  ],
   authors: [{ name: "Your Name" }],
   creator: "Your Name",
   openGraph: {
@@ -24,13 +36,15 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: "https://yourportfolio.com",
     title: "Full Stack Developer Portfolio",
-    description: "Portfolio showcasing modern web applications built with React, Next.js, and MERN stack",
+    description:
+      "Portfolio showcasing modern web applications built with React, Next.js, and MERN stack",
     siteName: "Full Stack Developer Portfolio",
   },
   twitter: {
     card: "summary_large_image",
     title: "Full Stack Developer Portfolio",
-    description: "Portfolio showcasing modern web applications built with React, Next.js, and MERN stack",
+    description:
+      "Portfolio showcasing modern web applications built with React, Next.js, and MERN stack",
     creator: "@yourusername",
   },
   robots: {
@@ -52,18 +66,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" >
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          {children}
-        </ThemeProvider>
+      {children}
       </body>
     </html>
   );

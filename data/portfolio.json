@@ -1,0 +1,424 @@
+{
+  "personal": {
+    "name": "Full Stack Developer",
+    "title": "Full Stack Developer",
+    "tagline": "Available for new projects",
+    "description": "Passionate about creating exceptional digital experiences with modern technologies. Specializing in React, Next.js, and the MERN stack.",
+    "location": "Bangladesh",
+    "email": "email@example.com",
+    "phone": "+1 (234) 567-8900",
+    "profileImage": "/images/profile.png",
+    "resumeUrl": "#",
+    "social": {
+      "github": "https://github.com/dipu67",
+      "linkedin": "https://linkedin.com/in/yourusername",
+      "email": "mailto:your.email@example.com"
+    }
+  },
+  "about": {
+    "title": "Crafting Digital Solutions",
+    "subtitle": "That make a difference in people's lives through innovative technology",
+    "mainTitle": "Building the Future, One Line of Code at a Time",
+    "description": [
+      "I'm a passionate Full Stack Developer with over 3 years of experience creating robust, scalable web applications. My journey in tech started with curiosity and has evolved into a deep expertise in modern JavaScript ecosystems.",
+      "I specialize in the MERN stack (MongoDB, Express.js, React, Node.js) and have extensive experience with Next.js for building performant, SEO-friendly applications.",
+      "My approach combines technical expertise with creative problem-solving to deliver solutions that not only meet requirements but exceed expectations."
+    ],
+    "highlights": [
+      {
+        "title": "Full Stack Expertise",
+        "description": "End-to-end development from database design to user interface"
+      },
+      {
+        "title": "Modern Technologies",
+        "description": "Latest frameworks and tools for optimal performance"
+      },
+      {
+        "title": "Problem Solving",
+        "description": "Creative solutions for complex technical challenges"
+      },
+      {
+        "title": "Continuous Learning",
+        "description": "Always staying updated with industry trends"
+      }
+    ]
+  },
+  "stats": [
+    {
+      "value": "3+",
+      "label": "Years Experience",
+      "icon": "Calendar",
+      "color": "blue"
+    },
+    {
+      "value": "50+",
+      "label": "Projects Done",
+      "icon": "CheckCircle",
+      "color": "green"
+    },
+    {
+      "value": "25+",
+      "label": "Happy Clients",
+      "icon": "Users",
+      "color": "purple"
+    },
+    {
+      "value": "24/7",
+      "label": "Support",
+      "icon": "Award",
+      "color": "pink"
+    }
+  ],
+  "skills": [
+    {
+      "category": "Frontend Development",
+      "icon": "Globe",
+      "color": "blue",
+      "technologies": [
+        {
+          "name": "React.js",
+          "level": 95,
+          "description": "Component-based UI development"
+        },
+        {
+          "name": "Next.js",
+          "level": 90,
+          "description": "Full-stack React framework"
+        },
+        {
+          "name": "TypeScript",
+          "level": 85,
+          "description": "Type-safe JavaScript"
+        },
+        {
+          "name": "Tailwind CSS",
+          "level": 90,
+          "description": "Utility-first CSS framework"
+        },
+        {
+          "name": "HTML5/CSS3",
+          "level": 95,
+          "description": "Modern web standards"
+        }
+      ]
+    },
+    {
+      "category": "Backend Development",
+      "icon": "Server",
+      "color": "green",
+      "technologies": [
+        {
+          "name": "Node.js",
+          "level": 88,
+          "description": "Server-side JavaScript runtime"
+        },
+        {
+          "name": "Express.js",
+          "level": 92,
+          "description": "Fast, minimalist web framework"
+        },
+        {
+          "name": "REST APIs",
+          "level": 90,
+          "description": "RESTful web services"
+        },
+        {
+          "name": "GraphQL",
+          "level": 75,
+          "description": "Query language for APIs"
+        },
+        {
+          "name": "JWT Auth",
+          "level": 85,
+          "description": "Secure authentication"
+        }
+      ]
+    },
+    {
+      "category": "Database & Storage",
+      "icon": "Database",
+      "color": "purple",
+      "technologies": [
+        {
+          "name": "MongoDB",
+          "level": 88,
+          "description": "NoSQL document database"
+        },
+        {
+          "name": "Mongoose",
+          "level": 90,
+          "description": "MongoDB object modeling"
+        },
+        {
+          "name": "PostgreSQL",
+          "level": 75,
+          "description": "Relational database"
+        },
+        {
+          "name": "Redis",
+          "level": 70,
+          "description": "In-memory data structure store"
+        },
+        {
+          "name": "Database Design",
+          "level": 85,
+          "description": "Schema design & optimization"
+        }
+      ]
+    },
+    {
+      "category": "Tools & DevOps",
+      "icon": "Code",
+      "color": "orange",
+      "technologies": [
+        {
+          "name": "Git/GitHub",
+          "level": 92,
+          "description": "Version control & collaboration"
+        },
+        {
+          "name": "Docker",
+          "level": 80,
+          "description": "Containerization platform"
+        },
+        {
+          "name": "AWS/Vercel",
+          "level": 78,
+          "description": "Cloud deployment platforms"
+        },
+        {
+          "name": "CI/CD",
+          "level": 75,
+          "description": "Automated deployment pipelines"
+        }
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "id": 1,
+      "title": "E-Commerce MERN Platform",
+      "description": "Full-stack e-commerce platform with comprehensive features including user authentication, payment processing, inventory management, and admin dashboard. Built with modern MERN stack technologies.",
+      "image": "bg-gradient-to-br from-blue-500 via-blue-600 to-purple-600",
+      "technologies": [
+        "React",
+        "Node.js",
+        "MongoDB",
+        "Express",
+        "Stripe",
+        "JWT",
+        "Tailwind CSS"
+      ],
+      "features": [
+        "User Authentication & Authorization",
+        "Stripe Payment Integration",
+        "Real-time Inventory Management",
+        "Admin Dashboard with Analytics",
+        "Order Tracking System",
+        "Product Reviews & Ratings",
+        "Shopping Cart & Wishlist",
+        "Email Notifications"
+      ],
+      "github": "https://github.com/dipu67/ecommerce-mern",
+      "live": "https://ecommerce-demo.vercel.app",
+      "type": "Full Stack",
+      "stats": {
+        "stars": 45,
+        "forks": 12,
+        "views": 1200
+      },
+      "status": "Completed"
+    },
+    {
+      "id": 2,
+      "title": "Task Management System",
+      "description": "Collaborative project management tool with real-time updates, drag-and-drop functionality, team management, and comprehensive project tracking features.",
+      "image": "bg-gradient-to-br from-green-500 via-green-600 to-teal-600",
+      "technologies": [
+        "Next.js",
+        "TypeScript",
+        "Express",
+        "Socket.io",
+        "MongoDB",
+        "Tailwind CSS"
+      ],
+      "features": [
+        "Real-time Collaboration",
+        "Drag & Drop Task Management",
+        "Team Management & Roles",
+        "File Upload & Sharing",
+        "Progress Tracking & Analytics",
+        "Notifications System",
+        "Calendar Integration",
+        "Time Tracking"
+      ],
+      "github": "https://github.com/dipu67/task-manager",
+      "live": "https://taskmanager-demo.vercel.app",
+      "type": "Full Stack",
+      "stats": {
+        "stars": 32,
+        "forks": 8,
+        "views": 890
+      },
+      "status": "Completed"
+    },
+    {
+      "id": 3,
+      "title": "Social Media Analytics Dashboard",
+      "description": "Comprehensive analytics dashboard for social media management with data visualization, automated reporting, and multi-platform integration capabilities.",
+      "image": "bg-gradient-to-br from-indigo-500 via-indigo-600 to-blue-600",
+      "technologies": [
+        "React",
+        "Express",
+        "MongoDB",
+        "Chart.js",
+        "REST APIs",
+        "Node.js"
+      ],
+      "features": [
+        "Multi-platform Data Integration",
+        "Interactive Data Visualization",
+        "Automated Report Generation",
+        "Real-time Analytics",
+        "Custom Dashboard Creation",
+        "Export Functionality",
+        "Performance Metrics",
+        "Trend Analysis"
+      ],
+      "github": "https://github.com/dipu67/social-analytics",
+      "live": "https://analytics-demo.vercel.app",
+      "type": "Full Stack",
+      "stats": {
+        "stars": 28,
+        "forks": 6,
+        "views": 750
+      },
+      "status": "Completed"
+    },
+    {
+      "id": 4,
+      "title": "Real-time Chat Application",
+      "description": "Modern chat application with real-time messaging, file sharing, group chats, video calls, and end-to-end encryption for secure communication.",
+      "image": "/images/socialapp.png",
+      "technologies": [
+        "React",
+        "Socket.io",
+        "Node.js",
+        "MongoDB",
+        "Express",
+        "WebRTC"
+      ],
+      "features": [
+        "Real-time Messaging",
+        "File & Media Sharing",
+        "Group Chat Management",
+        "Video & Voice Calls",
+        "End-to-end Encryption",
+        "Message Search",
+        "Online Status Indicators",
+        "Push Notifications"
+      ],
+      "github": "https://github.com/dipu67/socialApp",
+      "live": "https://socialapp.a24dev.me",
+      "type": "Full Stack",
+      "stats": {
+        "stars": 67,
+        "forks": 15,
+        "views": 1500
+      },
+      "status": "Completed"
+    },
+    {
+      "id": 5,
+      "title": "Weather Analytics Platform",
+      "description": "Comprehensive weather data platform with predictive analytics, interactive maps, customizable alerts, and detailed forecasting capabilities.",
+      "image": "bg-gradient-to-br from-cyan-500 via-cyan-600 to-blue-500",
+      "technologies": [
+        "Next.js",
+        "TypeScript",
+        "Express",
+        "MongoDB",
+        "Weather APIs",
+        "Chart.js"
+      ],
+      "features": [
+        "Predictive Weather Analytics",
+        "Interactive Weather Maps",
+        "Custom Alert System",
+        "Historical Data Analysis",
+        "Multi-location Tracking",
+        "Data Export & API",
+        "Mobile Responsive Design",
+        "Real-time Weather Updates"
+      ],
+      "github": "https://github.com/dipu67/weather-platform",
+      "live": "https://weather-demo.vercel.app",
+      "type": "Full Stack",
+      "stats": {
+        "stars": 23,
+        "forks": 5,
+        "views": 620
+      },
+      "status": "In Progress"
+    },
+    {
+      "id": 6,
+      "title": "Developer Portfolio CMS",
+      "description": "Modern responsive portfolio website with integrated CMS functionality, dark mode support, advanced animations, and admin panel for content management.",
+      "image": "bg-gradient-to-br from-violet-500 via-violet-600 to-purple-600",
+      "technologies": [
+        "Next.js",
+        "TypeScript",
+        "Tailwind CSS",
+        "Framer Motion",
+        "Lucide React",
+        "JSON Database"
+      ],
+      "features": [
+        "Responsive Mobile-First Design",
+        "Advanced Framer Motion Animations",
+        "Dark Mode Support",
+        "Admin Panel for Content Management",
+        "Real-time GitHub Stats Integration",
+        "SEO Optimized",
+        "Touch-Optimized Interactions",
+        "Performance Optimized"
+      ],
+      "github": "https://github.com/dipu67/portfolio",
+      "live": "https://portfolio-demo.vercel.app",
+      "type": "Full Stack",
+      "stats": {
+        "stars": 42,
+        "forks": 11,
+        "views": 1350
+      },
+      "status": "Completed"
+    }
+  ],
+  "testimonials": [
+    {
+      "name": "Sarah Johnson",
+      "role": "Product Manager at TechCorp",
+      "content": "Exceptional developer with deep understanding of modern web technologies. Delivered our e-commerce platform ahead of schedule with outstanding quality.",
+      "rating": 5,
+      "image": "bg-gradient-to-br from-pink-500 to-rose-500",
+      "company": "TechCorp"
+    },
+    {
+      "name": "Mike Chen",
+      "role": "CTO at StartupXYZ",
+      "content": "Outstanding full-stack developer. Built our entire platform from scratch using MERN stack. Professional, reliable, and highly skilled.",
+      "rating": 5,
+      "image": "bg-gradient-to-br from-blue-500 to-indigo-500",
+      "company": "StartupXYZ"
+    },
+    {
+      "name": "Emily Rodriguez",
+      "role": "Founder at InnovateLab",
+      "content": "Transformed our vision into reality with clean, scalable code. Expert in React and Node.js. Highly recommend for any web development project.",
+      "rating": 5,
+      "image": "bg-gradient-to-br from-green-500 to-teal-500",
+      "company": "InnovateLab"
+    }
+  ]
+}
