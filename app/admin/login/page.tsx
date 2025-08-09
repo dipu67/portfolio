@@ -19,19 +19,34 @@ export default function AdminLogin() {
     }
   }, [router])
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
     setError('')
 
-    // Simple password check (in production, use proper authentication)
-    if (password === process.env.ADMIN_PASSWORD) {
-      localStorage.setItem('admin_authenticated', 'true')
-      router.push('/admin')
-    } else {
-      setError('Invalid password')
+    try {
+      // Call secure API route for authentication
+      const response = await fetch('/api/admin/auth', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ password }),
+      })
+
+      const data = await response.json()
+
+      if (response.ok && data.success) {
+        localStorage.setItem('admin_authenticated', 'true')
+        router.push('/admin')
+      } else {
+        setError(data.error || 'Authentication failed')
+      }
+    } catch (error) {
+      setError('Network error. Please try again.')
+    } finally {
+      setIsLoading(false)
     }
-    setIsLoading(false)
   }
 
   return (
