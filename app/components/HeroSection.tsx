@@ -100,7 +100,7 @@ export default function HeroSection({ data }: HeroSectionProps) {
             transition={{ delay: 1.2, duration: 0.8 }}
           >
             <motion.h1 
-              className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black text-gray-900 dark:text-white leading-tight tracking-tight"
+              className="text-4xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-6xl font-black text-gray-900 dark:text-white leading-tight tracking-tight"
               initial={{ opacity: 0, scale: 0.5 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 1.4, duration: 0.8, type: "spring" }}
