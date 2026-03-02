@@ -30,8 +30,8 @@ export const metadata: Metadata = {
     "MongoDB",
     "Node.js",
   ],
-  authors: [{ name: "Your Name" }],
-  creator: "Your Name",
+  authors: [{ name: "Dipu Mia" }],
+  creator: "Dipu Mia",
   openGraph: {
     type: "website",
     locale: "en_US",
