@@ -9,9 +9,11 @@
     "lint": "next lint",
     "test": "jest --passWithNoTests",
     "test:watch": "jest --watch",
-    "test:ci": "jest --ci"
+    "test:ci": "jest --ci",
+    "db:seed": "npx ts-node scripts/seed-db.ts"
   },
   "dependencies": {
+    "better-sqlite3": "^12.6.2",
     "framer-motion": "^12.34.3",
     "lucide-react": "^0.576.0",
     "next": "^16.1.6",
@@ -24,6 +26,7 @@
     "@testing-library/jest-dom": "^6.6.4",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.6.1",
+    "@types/better-sqlite3": "^7.6.13",
     "@types/jest": "^30.0.0",
     "@types/node": "^20",
     "@types/react": "^19",

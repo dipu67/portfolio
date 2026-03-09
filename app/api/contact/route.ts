@@ -1,24 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
-import fs from 'fs'
-import path from 'path'
 import { telegramService } from '@/lib/telegram'
-
-const MESSAGES_FILE = path.join(process.cwd(), 'data', 'messages.json')
-
-// Ensure messages file exists
-function ensureMessagesFile() {
-  if (!fs.existsSync(MESSAGES_FILE)) {
-    fs.writeFileSync(MESSAGES_FILE, JSON.stringify([], null, 2))
-  }
-}
+import { getAllMessages, addMessage, bulkUpdateMessages, deleteMessage as dbDeleteMessage } from '@/lib/db'
 
 // GET - Retrieve all messages
 export async function GET() {
   try {
-    ensureMessagesFile()
-    const data = fs.readFileSync(MESSAGES_FILE, 'utf8')
-    const messages = JSON.parse(data)
-    
+    const messages = getAllMessages()
     return NextResponse.json(messages)
   } catch (error) {
     console.error('Error reading messages:', error)
@@ -29,7 +16,6 @@ export async function GET() {
 // POST - Add new message or update existing
 export async function POST(request: NextRequest) {
   try {
-    ensureMessagesFile()
     const body = await request.json()
     
     // Check if this is a new message submission or an update
@@ -41,25 +27,7 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: 'All fields are required' }, { status: 400 })
       }
       
-      const data = fs.readFileSync(MESSAGES_FILE, 'utf8')
-      const messages = JSON.parse(data)
-      
-      const newMessage = {
-        id: Date.now(),
-        name,
-        email,
-        subject,
-        message,
-        status: 'unread',
-        priority: 'normal',
-        submittedAt: new Date().toISOString(),
-        readAt: null,
-        respondedAt: null,
-        notes: ''
-      }
-      
-      messages.push(newMessage)
-      fs.writeFileSync(MESSAGES_FILE, JSON.stringify(messages, null, 2))
+      const newMessage = addMessage({ name, email, subject, message })
       
       // Send Telegram notification for new contact message
       try {
@@ -83,8 +51,7 @@ export async function POST(request: NextRequest) {
       })
     } else {
       // Update existing messages (for admin)
-      const messages = body
-      fs.writeFileSync(MESSAGES_FILE, JSON.stringify(messages, null, 2))
+      bulkUpdateMessages(body)
       return NextResponse.json({ success: true, message: 'Messages updated successfully!' })
     }
   } catch (error) {
@@ -96,7 +63,6 @@ export async function POST(request: NextRequest) {
 // DELETE - Delete a message
 export async function DELETE(request: NextRequest) {
   try {
-    ensureMessagesFile()
     const { searchParams } = new URL(request.url)
     const messageId = searchParams.get('id')
     
@@ -104,16 +70,11 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ error: 'Message ID is required' }, { status: 400 })
     }
     
-    const data = fs.readFileSync(MESSAGES_FILE, 'utf8')
-    const messages = JSON.parse(data)
+    const deleted = dbDeleteMessage(Number(messageId))
     
-    const filteredMessages = messages.filter((msg: any) => msg.id.toString() !== messageId)
-    
-    if (filteredMessages.length === messages.length) {
+    if (!deleted) {
       return NextResponse.json({ error: 'Message not found' }, { status: 404 })
     }
-    
-    fs.writeFileSync(MESSAGES_FILE, JSON.stringify(filteredMessages, null, 2))
     
     return NextResponse.json({ success: true, message: 'Message deleted successfully!' })
   } catch (error) {
